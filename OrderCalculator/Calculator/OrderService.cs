@@ -10,9 +10,9 @@ namespace OrderCalculator.Calculator
 	public class OrderService : IOrderService
 	{
 		private readonly ILogger _logger;
-		private readonly IRepository _repository;
+		private readonly IRepositoryQuery _repository;
 
-		public OrderService(ILogger logger, IRepository reposistory)
+		public OrderService(ILogger logger, IRepositoryQuery reposistory)
 		{
 			_logger = logger;
 			_repository = reposistory;
@@ -28,15 +28,15 @@ namespace OrderCalculator.Calculator
 				if (book == null)
 					_logger.LogWarning($"Book not found: {b.Title} by {b.Authors.FirstOrDefault()}");
 				else
-					UpdateTotals(result, book, fees);
+					UpdateTotals(result, book, fees, b.Units);
 			});
 			AdjustForDeliveryFees(result, fees);
 			return result;
 		}
 
-		private void UpdateTotals(OrderTotal totals, Book book, Fees fees)
+		private void UpdateTotals(OrderTotal totals, Book book, Fees fees, int units)
 		{
-			var bookCost = book.Price;
+			var bookCost = book.Price * units;
 			var genreDiscount = _repository.GetActiveDiscount(book.Genre);
 			if (genreDiscount != null) {
 				bookCost -= bookCost * genreDiscount.Multiplier;
@@ -54,7 +54,7 @@ namespace OrderCalculator.Calculator
 				.FirstOrDefault();
 			if (applicableDeliveryFee != null) {
 				orderTotal.TotalWithoutTax += applicableDeliveryFee.Fee;
-				orderTotal.TotalWithTax += (applicableDeliveryFee.Fee * fees.Tax);
+				orderTotal.TotalWithTax += (applicableDeliveryFee.Fee + applicableDeliveryFee.Fee * fees.Tax);
 			}
 		}
 	}

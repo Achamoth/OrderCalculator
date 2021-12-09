@@ -2,6 +2,6 @@
 {
 	public interface IDataLoader
 	{
-		public IRepository BuildRepository(string dataDirectory);
+		public IRepositoryQuery BuildRepository(string dataDirectory);
 	}
 }

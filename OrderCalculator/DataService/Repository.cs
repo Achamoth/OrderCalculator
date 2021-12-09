@@ -5,7 +5,7 @@ using OrderCalculator.Domain;
 
 namespace OrderCalculator.DataService
 {
-	public class Repository : IRepository
+	public class Repository : IRepositoryCommand, IRepositoryQuery
 	{
 		private readonly Dictionary<string, Book> _books;
 		private readonly Dictionary<Genre, Discount> _discounts;
@@ -16,6 +16,8 @@ namespace OrderCalculator.DataService
 			_books = new Dictionary<string, Book>();
 			_discounts = new Dictionary<Genre, Discount>();
 		}
+
+		#region IRepositoryCommand
 
 		public void AddBook(Book book)
 		{
@@ -40,7 +42,9 @@ namespace OrderCalculator.DataService
 			_fees = fees;
 		}
 
-		#region IRepository
+		#endregion
+
+		#region IRepositoryQuery
 
 		public Book GetBook(string name, IEnumerable<string> authors)
 		{

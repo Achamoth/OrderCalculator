@@ -19,7 +19,7 @@ namespace OrderCalculator.DataService
 			_logger = logger;
 		}
 
-		public IRepository BuildRepository(string directory)
+		public IRepositoryQuery BuildRepository(string directory)
 		{
 			var result = new Repository();
 
