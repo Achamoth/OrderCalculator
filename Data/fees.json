@@ -1,0 +1,9 @@
+{
+  "tax": 0.1,
+  "deliveryFees": [
+    {
+      "threshold": 20,
+      "fee": 5.95
+    }
+  ]
+}
